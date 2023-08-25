@@ -1,4 +1,7 @@
+# Truck class represents a delivery truck
 class Truck:
+
+    # Constructor initializes truck attributes
     def __init__(self, truck_id, current_address = None, destination_address = None,
                  max_weight = 0, mileage = 0, status = None, departure_time = None,
                  package_list = [], weight = 0):
@@ -12,6 +15,7 @@ class Truck:
         self.weight = weight
         self.max_weight = max_weight
 
+    # String representation of truck
     def __str__(self):
         return f"Truck ID: {self.truck_id}\n" \
                f"Current Address: {self.current_address}\n" \

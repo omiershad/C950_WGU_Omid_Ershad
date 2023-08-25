@@ -1,7 +1,7 @@
 # Omid Ershad
-# Student ID: ???
+# Student ID: 011123774
 
-
+# Import required packages
 import csv
 import datetime
 
@@ -9,7 +9,10 @@ import truck
 from create_hash_map import ChainingHashTable
 from package import Package
 
+# Initialize hash table to store packages
 hashtable = ChainingHashTable()
+
+# Read package data from CSV
 package_file = "package_file.csv"
 address_file = "address_table.csv"
 distance_file = "distance_table.csv"
@@ -17,8 +20,8 @@ distance_file = "distance_table.csv"
 with open(package_file) as package_data:
     package_reader = csv.reader(package_data)
     for package in package_reader:
+        # Create package object
         package_id = int(package[0])
-
         address = package[1]
         city = package[2]
         state = package[3]
@@ -26,25 +29,27 @@ with open(package_file) as package_data:
         deadline = package[5]
         weight = package[6]
         status = "At Hub"
+
+        # Create package object and insert into hash table
         package_object = Package(package_id, address, city, state, zip, deadline, weight)
         hashtable.insert(package_id, package_object)
 
+# Read address data from CSV
 address_list = []
-
 with open(address_file) as address_data:
     address_reader = csv.reader(address_data)
     for address in address_reader:
         address_list.append(address)
 
+# Read distance data from CSV
 distance_list = []
-
 with open(distance_file) as distance_data:
     distance_reader = csv.reader(distance_data)
     for distance in distance_reader:
         distance_list.append(distance)
 
 
-# index
+# Function to get address index from address list
 def get_index_for_address(address):
     for address_data in address_list:
         if address == address_data[2]:
@@ -52,7 +57,7 @@ def get_index_for_address(address):
     return -1
 
 
-# find distance between two addresses and returns the distances between them
+# Function to calculate distance between addresses
 def distance_between_two_addresses(address1, address2):
     address_index1 = get_index_for_address(address1)
     address_index2 = get_index_for_address(address2)
@@ -63,7 +68,7 @@ def distance_between_two_addresses(address1, address2):
     return distance_result
 
 
-# Create a method to extract an address from the Address CSV file. Use for loop and an if statement in that loop
+# Create method to deliver packages for given truck
 def deliver_truck(truck):
     print(truck.package_list)
     current_location = truck.current_address
@@ -85,9 +90,9 @@ truck3 = truck.Truck(truck_id=3, package_list=[9, 2, 4, 5, 7, 8, 10, 11, 12, 17,
 
 import copy
 
-
+# Function to deliver packages for a truck
 def deliver_packages(truck):
-    # Make a deep copy of the truck's package list so we don't modify the original
+    # Make a deep copy of the truck's package list, so we don't modify the original
     packages = copy.deepcopy(truck.package_list)
     current_time = truck.departure_time
     current_location = truck.current_address
@@ -103,13 +108,12 @@ def deliver_packages(truck):
         # Deliver it
         package.delivery_time = current_time
         package.departure_time = truck.departure_time
-        # print(f"Delivering package {nearest_package_id} to {package.address} at {package.delivery_time} total {truck.mileage}")
         # Remove delivered package from list
         packages.remove(nearest_package_id)
 
     return current_time
 
-
+# Define a function to find nearest package
 def find_nearest_package(current_location, package_ids):
     nearest_distance = float("inf")
     nearest_package_id = None
@@ -123,7 +127,7 @@ def find_nearest_package(current_location, package_ids):
 
     return nearest_package_id
 
-
+# Deliver packages for each truck and determine their return times
 truck1_return = deliver_packages(truck1)
 truck2_return = deliver_packages(truck2)
 if truck1_return < truck2_return:
@@ -131,21 +135,17 @@ if truck1_return < truck2_return:
 else:
     truck3.departure_time = truck2_return
 
-# fixed package number9
+# Fix deliver for package number #9
 deliver_packages(truck3)
 
 
-# print total mileage of all packages
+# Print total mileage of all trucks combined
 def print_total_mileage(truck1, truck2, truck3):
     total_mileage = truck1.mileage + truck2.mileage + truck3.mileage
     print("Total Mileage:", total_mileage)
 
 
-# ...
-
-# Call the function after the deliveries are completed
-
-
+# Main loop for user interface
 while True:
     print("-" * 40)
     # put mileage here
